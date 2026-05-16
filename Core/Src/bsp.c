@@ -35,9 +35,7 @@
 #include "qpn.h"
 #include "bsp.h"
 #include "main.h"
-#include "stm32u0xx_ll_pwr.h"
 #include "tasks.h"
-#include "stm32u0xx_ll_gpio.h"
 
 //Q_DEFINE_THIS_FILE
 
