@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="5.2.3" links="0">
+ <documentation>About this example:
+-------------------
+Simple &quot;Blinky&quot; console application for workstations (Windows, Linux, MacOS)
+(see &quot;QM Tutorial&quot; at: https://www.state-machine.com/qm/gs_tut.html)
+
+This example demonstrates:
+- Active object (Blinky) with state machine
+- Board Support Package abstraction for portability
+- BSP implementation for desktop OS (Windows, Linux, MacOS)
+- Platform-independent main() function
+- Makefile to build the generated code on desktop OS (Windows, Linux, MacOS)
+- Customized tools for building the generated code directly from QM
+
+Building the example:
+---------------------
+To build this example, you will need the QP-nano framework installed on your computer and the GNU-GCC compiler, which you can get by installing the QP-bundle from:
+
+https://www.state-machine.com/#Downloads
+
+NOTE: QP-nano has been discontinued and is NOT present in the newer releases of QP-bundle.
+
+
+Running the example:
+--------------------
+This example is a simple console application, which you can run from a terminal.
+
+For more QM examples for QP-nano see:
+https://www.state-machine.com/qpn/exa.html</documentation>
+ <framework name="qpn"/>
+ <package name="AOs" stereotype="0x02">
+  <class name="Test" superclass="qpn::QActive">
+   <statechart properties="0x01">
+    <initial target="../1">
+     <initial_glyph conn="11,6,4,0,7">
+      <action box="0,-2,40,4"/>
+     </initial_glyph>
+    </initial>
+    <state name="paused">
+     <entry>BSP_LED1_On();
+BSP_LED2_Off();</entry>
+     <tran trig="BUTTON_CLICK" target="../../2">
+      <tran_glyph conn="28,23,1,0,20,12">
+       <action box="0,-2,14,3"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="4,13,24,20">
+      <entry box="1,2,17,6"/>
+     </state_glyph>
+    </state>
+    <state name="working">
+     <entry>BSP_LED1_Off();
+BSP_LED2_On();
+QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
+     <tran trig="Q_TIMEOUT" target="../../1">
+      <action>Shutdown();</action>
+      <tran_glyph conn="32,49,3,2,-18,-16">
+       <action box="0,-2,13,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="BUTTON_CLICK" target="../../1">
+      <tran_glyph conn="32,52,3,2,-23,-19">
+       <action box="0,-2,16,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="32,35,29,22">
+      <entry box="1,2,25,10"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="67,62"/>
+   </statechart>
+  </class>
+  <operation name="Test_ctor" type="void" visibility="0x00" properties="0x01">
+   <parameter name="me" type="Test* const"/>
+   <code>QActive_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;Test_initial));</code>
+  </operation>
+ </package>
+ <directory name=".">
+  <file name="Core/Src/test.c">
+   <text>#include &quot;qpn.h&quot;    /* QP-nano framework API */
+#include &quot;bsp.h&quot;    /* Board Support Package interface */
+#include &quot;test.h&quot;
+
+$define${AOs::Test_ctor}
+$define${AOs::Test}</text>
+  </file>
+  <file name="Core/Inc/test.h">
+   <text>$declare${AOs::Test}
+$declare${AOs::Test_ctor}</text>
+  </file>
+ </directory>
+</model>
