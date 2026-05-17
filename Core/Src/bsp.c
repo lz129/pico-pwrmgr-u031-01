@@ -65,20 +65,18 @@ static volatile uint8_t clickCount;
 
 void Shutdown(void)
 {
-    /* Enable Clocks */
-    // RCC->AHBENR |= RCC_AHBEN;
-     
-    // /* Prepare for Standby */
-    // // if WKUP pins are already high, the WUF bit will be set
-    // PWR->CSR |= PWR_CSR_EWUP1;
-     
-    // PWR->CR |= PWR_CR_CWUF; // clear the WUF flag after 2 clock cycles
-    // PWR->CR |= PWR_CR_ULP;   // V_{REFINT} is off in low-power mode
-    // PWR->CR |= PWR_CR_PDDS; // Enter Standby mode when the CPU enters deepsleep
-     
-    // SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk; // low-power mode = stop mode
-    // SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk; // reenter low-power mode after ISR
-    // __WFI(); // enter low-power mode
+  /* Set Shutdown mode */
+  MODIFY_REG(PWR->CR1, PWR_CR1_LPMS, PWR_CR1_LPMS_2);
+
+  /* Set SLEEPDEEP bit of Cortex System Control Register */
+  SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPDEEP_Msk));
+
+  /* This option is used to ensure that store operations are completed */
+#if defined ( __CC_ARM)
+  __force_stores();
+#endif /* __CC_ARM */
+  /* Request Wait For Interrupt */
+  __WFI();
 }
 
 void SysTick_Handler(void) {
