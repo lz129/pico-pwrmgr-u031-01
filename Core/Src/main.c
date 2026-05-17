@@ -120,8 +120,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   return QF_run(); /* transfer control to QF-nano */
-  /* USER CODE END WHILE */
-  /* USER CODE BEGIN 3 */
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
 }
 
@@ -131,8 +132,8 @@ int main(void)
   */
 void SystemClock_Config(void)
 {
-  LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
-  while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_1)
+  LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
+  while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_0)
   {
   }
 
@@ -140,27 +141,28 @@ void SystemClock_Config(void)
   while (LL_PWR_IsActiveFlag_VOS() != 0)
   {
   }
-  LL_RCC_HSI_Enable();
+  LL_RCC_MSI_Enable();
 
-   /* Wait till HSI is ready */
-  while(LL_RCC_HSI_IsReady() != 1)
+   /* Wait till MSI is ready */
+  while(LL_RCC_MSI_IsReady() != 1)
   {
   }
 
-  LL_RCC_HSI_SetCalibTrimming(64);
-  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
+  LL_RCC_MSI_EnableRangeSelection();
+  LL_RCC_MSI_SetRange(LL_RCC_MSIRANGE_6);
+  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_MSI);
 
    /* Wait till System clock is ready */
-  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
+  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_MSI)
   {
   }
 
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
   LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
 
-  LL_Init1msTick(16000000);
+  LL_Init1msTick(4000000);
 
-  LL_SetSystemCoreClock(16000000);
+  LL_SetSystemCoreClock(4000000);
 }
 
 /**

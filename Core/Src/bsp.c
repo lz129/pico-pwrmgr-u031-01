@@ -35,6 +35,8 @@
 #include "qpn.h"
 #include "bsp.h"
 #include "main.h"
+#include "stm32u0xx_ll_gpio.h"
+#include "stm32u0xx_ll_pwr.h"
 #include "tasks.h"
 
 //Q_DEFINE_THIS_FILE
@@ -65,14 +67,22 @@ static volatile uint8_t clickCount;
 
 void Shutdown(void)
 {
-  /* Set Shutdown mode */
-  MODIFY_REG(PWR->CR1, PWR_CR1_LPMS, PWR_CR1_LPMS_2);
+   /* Setup pullup resistor for wakeup pin while in shutdown mode */
+   LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_0);
+   LL_PWR_EnablePUPDCfg();
 
-  /* Set SLEEPDEEP bit of Cortex System Control Register */
-  SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPDEEP_Msk));
+   /* Enable wake up pin */ 
+   LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN1);
+   LL_PWR_ClearFlag_WU1();
 
-  /* Request Wait For Interrupt */
-  __WFI();
+   /* Set Shutdown mode */
+   LL_PWR_SetPowerMode(LL_PWR_MODE_SHUTDOWN);
+
+   /* Set SLEEPDEEP bit of Cortex System Control Register */
+   LL_LPM_EnableDeepSleep();
+
+   /* Request Wait For Interrupt */
+   __WFI();
 }
 
 void SysTick_Handler(void) {
@@ -85,7 +95,8 @@ void SysTick_Handler(void) {
     if (pressed && (pressedCounter != 0xffff)) pressedCounter += pressed;
     if (released && (releasedCounter != 0xffff)) releasedCounter += released;
 
-    debounceReg = (debounceReg << 1) + BSP_ButtonPressed();
+    uint32_t bp = BSP_ButtonPressed();
+    debounceReg = (debounceReg << 1) + bp;
     if (debounceReg == 0x7f)
     {
         if (releasedCounter > 100) {
@@ -129,29 +140,29 @@ void BSP_init(void) {
     SystemCoreClockUpdate();
 }
 
-void BSP_LED1_On(void)
+void BSP_LED1_Off(void)
 {
     LL_GPIO_SetOutputPin(LED1_GPIO_Port, LED1_Pin);
 }
 
-void BSP_LED1_Off(void)
+void BSP_LED1_On(void)
 {
     LL_GPIO_ResetOutputPin(LED1_GPIO_Port, LED1_Pin);
 }
 
-void BSP_LED2_On(void)
+void BSP_LED2_Off(void)
 {
     LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
 }
 
-void BSP_LED2_Off(void)
+void BSP_LED2_On(void)
 {
     LL_GPIO_ResetOutputPin(LED2_GPIO_Port, LED2_Pin);
 }
 
 uint32_t BSP_ButtonPressed(void)
 {
-    return LL_GPIO_IsInputPinSet(BUTTON1_GPIO_Port, BUTTON1_Pin);
+    return ! LL_GPIO_IsInputPinSet(BUTTON1_GPIO_Port, BUTTON1_Pin);
 }
 
 
@@ -179,7 +190,7 @@ void QV_onIdle(void) {  /* called with interrupts disabled, see NOTE1 */
     //GPIOA->BSRR |= (LED_LD2);        /* turn LED[n] on  */
     //GPIOA->BSRR |= (LED_LD2 << 16);  /* turn LED[n] off */
 
-#ifdef NDEBUG
+//#ifdef NDEBUG
     /* Put the CPU and peripherals to the low-power mode.
     * you might need to customize the clock management for your application,
     * see the datasheet for your particular Cortex-M3 MCU.
@@ -194,11 +205,11 @@ void QV_onIdle(void) {  /* called with interrupts disabled, see NOTE1 */
     * The trick with BOOT(0) is it gets the part to run the System Loader
     * instead of your broken code. When done disconnect BOOT0, and start over.
     */
-    //QV_CPU_SLEEP();  /* atomically go to sleep and enable interrupts */
-    QF_INT_ENABLE(); /* for now, just enable interrupts */
-#else
-    QF_INT_ENABLE(); /* just enable interrupts */
-#endif
+    QV_CPU_SLEEP();  /* atomically go to sleep and enable interrupts */
+    //QF_INT_ENABLE(); /* for now, just enable interrupts */
+//#else
+//    QF_INT_ENABLE(); /* just enable interrupts */
+//#endif
 }
 
 /*..........................................................................*/
