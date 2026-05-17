@@ -1,0 +1,13 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "QM",
+            "type": "shell",
+            "command": "/home/josef/tools/qm_5.2.3/bin/qm.sh ${file}",
+            "problemMatcher": []
+        }
+    ]
+}
