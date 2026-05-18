@@ -74,7 +74,7 @@ QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
      </state_glyph>
     </state>
     <state name="startup">
-     <entry>//BSP_CheckCheckNoButtonWakeup();
+     <entry>BSP_CheckCheckNoButtonWakeup();
 BSP_CheckButton1Wakeup();
 BSP_CheckButton2Wakeup();
 

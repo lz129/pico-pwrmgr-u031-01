@@ -81,14 +81,17 @@ void Shutdown(void)
 
    /* Enable wake up pin 1 */ 
    LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN1);
+   LL_PWR_SetWakeUpPinPolarityLow(LL_PWR_WAKEUP_PIN1);
    LL_PWR_ClearFlag_WU1();
 
    /* Enable wake up pin 3 */ 
    LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN3);
+   LL_PWR_SetWakeUpPinPolarityLow(LL_PWR_WAKEUP_PIN3);
    LL_PWR_ClearFlag_WU3();
 
    /* Set Shutdown mode */
-   LL_PWR_SetPowerMode(LL_PWR_MODE_SHUTDOWN);
+   LL_PWR_SetPowerMode(LL_PWR_MODE_STANDBY);
+   LL_PWR_EnableBORPVD_ULP();
 
    /* Set SLEEPDEEP bit of Cortex System Control Register */
    LL_LPM_EnableDeepSleep();

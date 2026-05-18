@@ -179,7 +179,7 @@ static void MX_GPIO_Init(void)
   LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
 
   /**/
-  LL_GPIO_ResetOutputPin(GPIOA, LED1_Pin|LED2_Pin);
+  LL_GPIO_SetOutputPin(GPIOA, LED1_Pin|LED2_Pin);
 
   /**/
   GPIO_InitStruct.Pin = BUTTON1_Pin|BUTTON2_Pin;
