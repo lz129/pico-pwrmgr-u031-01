@@ -40,9 +40,14 @@ https://www.state-machine.com/qpn/exa.html</documentation>
     <state name="paused">
      <entry>BSP_LED1_On();
 BSP_LED2_Off();</entry>
-     <tran trig="BUTTON_CLICK" target="../../2">
+     <tran trig="BUTTON1_CLICK" target="../../2">
       <tran_glyph conn="28,23,1,0,20,12">
        <action box="0,-2,14,3"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="BUTTON2_CLICK" target="../../2">
+      <tran_glyph conn="28,20,1,0,22,15">
+       <action box="0,-2,15,2"/>
       </tran_glyph>
      </tran>
      <state_glyph node="4,13,24,20">
@@ -59,9 +64,14 @@ QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
        <action box="0,-2,13,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="BUTTON_CLICK" target="../../1">
-      <tran_glyph conn="32,52,3,2,-23,-19">
+     <tran trig="BUTTON1_CLICK" target="../../1">
+      <tran_glyph conn="32,52,3,2,-22,-19">
        <action box="0,-2,16,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="BUTTON2_CLICK" target="../../1">
+      <tran_glyph conn="32,54,3,2,-24,-21">
+       <action box="0,-2,17,3"/>
       </tran_glyph>
      </tran>
      <state_glyph node="32,35,29,22">

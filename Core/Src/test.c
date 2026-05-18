@@ -67,8 +67,13 @@ QState Test_paused(Test * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Test::SM::paused::BUTTON_CLICK} */
-        case BUTTON_CLICK_SIG: {
+        /*${AOs::Test::SM::paused::BUTTON1_CLICK} */
+        case BUTTON1_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_working);
+            break;
+        }
+        /*${AOs::Test::SM::paused::BUTTON2_CLICK} */
+        case BUTTON2_CLICK_SIG: {
             status_ = Q_TRAN(&Test_working);
             break;
         }
@@ -98,8 +103,13 @@ QState Test_working(Test * const me) {
             status_ = Q_TRAN(&Test_paused);
             break;
         }
-        /*${AOs::Test::SM::working::BUTTON_CLICK} */
-        case BUTTON_CLICK_SIG: {
+        /*${AOs::Test::SM::working::BUTTON1_CLICK} */
+        case BUTTON1_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_paused);
+            break;
+        }
+        /*${AOs::Test::SM::working::BUTTON2_CLICK} */
+        case BUTTON2_CLICK_SIG: {
             status_ = Q_TRAN(&Test_paused);
             break;
         }

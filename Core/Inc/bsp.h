@@ -42,11 +42,17 @@ enum Signals {
 
     TIMEOUT_SIG,            // Timeout
 
-    BUTTON_PRESS_SIG,       // Rotary encoder button press
-    BUTTON_RELEASE_SIG,     // Rotary encoder button release
-    BUTTON_CLICK_SIG,
-    BUTTON_LONG_PRESS_SIG,
-    BUTTON_LONG_PRESS_REPEAT_SIG,
+    BUTTON1_PRESS_SIG,       // Rotary encoder button press
+    BUTTON1_RELEASE_SIG,     // Rotary encoder button release
+    BUTTON1_CLICK_SIG,
+    BUTTON1_LONG_PRESS_SIG,
+    BUTTON1_LONG_PRESS_REPEAT_SIG,
+
+    BUTTON2_PRESS_SIG,       // Rotary encoder button press
+    BUTTON2_RELEASE_SIG,     // Rotary encoder button release
+    BUTTON2_CLICK_SIG,
+    BUTTON2_LONG_PRESS_SIG,
+    BUTTON2_LONG_PRESS_REPEAT_SIG,
 
     ENCODER_STEP_SIG,       // Rotary encoder step
     ONESECOND_SIG,          // One second tick
@@ -62,7 +68,8 @@ void BSP_LED1_On(void);
 void BSP_LED1_Off(void);
 void BSP_LED2_On(void);
 void BSP_LED2_Off(void);
-uint32_t BSP_ButtonPressed(void);
+uint32_t BSP_Button1Pressed(void);
+uint32_t BSP_Button2Pressed(void);
 void Shutdown(void);
 
 #endif /* BSP_H */

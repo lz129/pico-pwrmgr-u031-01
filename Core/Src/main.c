@@ -60,7 +60,6 @@ QActiveCB const Q_ROM QF_active[] = {
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_LPUART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -112,7 +111,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_LPUART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -166,66 +164,6 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief LPUART2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_LPUART2_UART_Init(void)
-{
-
-  /* USER CODE BEGIN LPUART2_Init 0 */
-
-  /* USER CODE END LPUART2_Init 0 */
-
-  LL_LPUART_InitTypeDef LPUART_InitStruct = {0};
-
-  LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  LL_RCC_SetLPUARTClockSource(LL_RCC_LPUART2_CLKSOURCE_PCLK1);
-
-  /* Peripheral clock enable */
-  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_LPUART2);
-
-  LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
-  /**LPUART2 GPIO Configuration
-  PB6   ------> LPUART2_TX
-  PB7   ------> LPUART2_RX
-  */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_6|LL_GPIO_PIN_7;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-  GPIO_InitStruct.Alternate = LL_GPIO_AF_10;
-  LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN LPUART2_Init 1 */
-
-  /* USER CODE END LPUART2_Init 1 */
-  LPUART_InitStruct.PrescalerValue = LL_LPUART_PRESCALER_DIV1;
-  LPUART_InitStruct.BaudRate = 209700;
-  LPUART_InitStruct.DataWidth = LL_LPUART_DATAWIDTH_8B;
-  LPUART_InitStruct.StopBits = LL_LPUART_STOPBITS_1;
-  LPUART_InitStruct.Parity = LL_LPUART_PARITY_NONE;
-  LPUART_InitStruct.TransferDirection = LL_LPUART_DIRECTION_TX_RX;
-  LPUART_InitStruct.HardwareFlowControl = LL_LPUART_HWCONTROL_NONE;
-  LL_LPUART_Init(LPUART2, &LPUART_InitStruct);
-  LL_LPUART_SetTXFIFOThreshold(LPUART2, LL_LPUART_FIFOTHRESHOLD_1_8);
-  LL_LPUART_SetRXFIFOThreshold(LPUART2, LL_LPUART_FIFOTHRESHOLD_1_8);
-  LL_LPUART_DisableFIFO(LPUART2);
-
-  /* USER CODE BEGIN WKUPType LPUART2 */
-
-  /* USER CODE END WKUPType LPUART2 */
-
-  LL_LPUART_Enable(LPUART2);
-  /* USER CODE BEGIN LPUART2_Init 2 */
-
-  /* USER CODE END LPUART2_Init 2 */
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -239,22 +177,15 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
-  LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
 
   /**/
   LL_GPIO_ResetOutputPin(GPIOA, LED1_Pin|LED2_Pin);
 
   /**/
-  GPIO_InitStruct.Pin = BUTTON1_Pin;
+  GPIO_InitStruct.Pin = BUTTON1_Pin|BUTTON2_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
-  LL_GPIO_Init(BUTTON1_GPIO_Port, &GPIO_InitStruct);
-
-  /**/
-  GPIO_InitStruct.Pin = BUTTON2_Pin;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-  LL_GPIO_Init(BUTTON2_GPIO_Port, &GPIO_InitStruct);
+  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /**/
   GPIO_InitStruct.Pin = LED1_Pin|LED2_Pin;

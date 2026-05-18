@@ -58,22 +58,34 @@ Q_ASSERT_COMPILE(MAX_KERNEL_AWARE_CMSIS_PRI <= (0xFF >>(8-__NVIC_PRIO_BITS)));
 // debounce button
 static volatile uint16_t ticks;
 
-static volatile uint8_t debounceReg = 0x02;
-static volatile uint8_t pressed;
-static volatile uint8_t released;
-static volatile uint16_t pressedCounter;
-static volatile uint16_t releasedCounter;
-static volatile uint8_t clickCount;
+static volatile uint8_t debounceReg1 = 0x02;
+static volatile uint8_t pressed1;
+static volatile uint8_t released1;
+static volatile uint16_t pressedCounter1;
+static volatile uint16_t releasedCounter1;
+static volatile uint8_t clickCount1;
+
+static volatile uint8_t debounceReg2 = 0x02;
+static volatile uint8_t pressed2;
+static volatile uint8_t released2;
+static volatile uint16_t pressedCounter2;
+static volatile uint16_t releasedCounter2;
+static volatile uint8_t clickCount2;
 
 void Shutdown(void)
 {
    /* Setup pullup resistor for wakeup pin while in shutdown mode */
    LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_0);
+   LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_1);
    LL_PWR_EnablePUPDCfg();
 
-   /* Enable wake up pin */ 
+   /* Enable wake up pin 1 */ 
    LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN1);
    LL_PWR_ClearFlag_WU1();
+
+   /* Enable wake up pin 3 */ 
+   LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN3);
+   LL_PWR_ClearFlag_WU3();
 
    /* Set Shutdown mode */
    LL_PWR_SetPowerMode(LL_PWR_MODE_SHUTDOWN);
@@ -91,45 +103,87 @@ void SysTick_Handler(void) {
 
     QF_tickXISR(0U); /* process time events for rate 0 */
 
-    // debounce button
-    if (pressed && (pressedCounter != 0xffff)) pressedCounter += pressed;
-    if (released && (releasedCounter != 0xffff)) releasedCounter += released;
+    // debounce button 1
+    if (pressed1 && (pressedCounter1 != 0xffff)) pressedCounter1 += pressed1;
+    if (released1 && (releasedCounter1 != 0xffff)) releasedCounter1 += released1;
 
-    uint32_t bp = BSP_ButtonPressed();
-    debounceReg = (debounceReg << 1) + bp;
-    if (debounceReg == 0x7f)
+    debounceReg1 = (debounceReg1 << 1) + BSP_Button1Pressed();
+    if (debounceReg1 == 0x7f)
     {
-        if (releasedCounter > 100) {
-            clickCount = 1;
+        if (releasedCounter1 > 100) {
+            clickCount1 = 1;
         }
-        pressed = 1;
-        released = 0;
-        pressedCounter = 0;
-        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON_PRESS_SIG, 0U);
+        pressed1 = 1;
+        released1 = 0;
+        pressedCounter1 = 0;
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON1_PRESS_SIG, 0U);
     }
-    if (debounceReg == 0x80)
+    if (debounceReg1 == 0x80)
     {
-        if (pressedCounter > 100) {
-            clickCount = 0;
+        if (pressedCounter1 > 100) {
+            clickCount1 = 0;
         }
-        released = 1;
-        pressed = 0;
-        releasedCounter = 0;
-        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON_RELEASE_SIG, 0U);
+        released1 = 1;
+        pressed1 = 0;
+        releasedCounter1 = 0;
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON1_RELEASE_SIG, 0U);
 
-        if (clickCount > 0) {
-            QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON_CLICK_SIG, clickCount);
+        if (clickCount1 > 0) {
+            QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON1_CLICK_SIG, clickCount1);
         }
 
-        clickCount++;
+        clickCount1++;
     }
 
-    if (pressedCounter == 256) {
-        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON_LONG_PRESS_SIG, 0U);
+    if (pressedCounter1 == 256) {
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON1_LONG_PRESS_SIG, 0U);
     }
-    if ((pressedCounter > 256) && ((pressedCounter % 128) == 0)) {
-        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON_LONG_PRESS_REPEAT_SIG, 0U);
+    if ((pressedCounter1 > 256) && ((pressedCounter1 % 128) == 0)) {
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON1_LONG_PRESS_REPEAT_SIG, 0U);
     }
+
+
+    // debounce button 2
+    if (pressed2 && (pressedCounter2 != 0xffff)) pressedCounter2 += pressed2;
+    if (released2 && (releasedCounter2 != 0xffff)) releasedCounter2 += released2;
+
+    debounceReg2 = (debounceReg2 << 1) + BSP_Button2Pressed();
+    if (debounceReg2 == 0x7f)
+    {
+        if (releasedCounter2 > 100) {
+            clickCount2 = 1;
+        }
+        pressed2 = 1;
+        released2 = 0;
+        pressedCounter2 = 0;
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON2_PRESS_SIG, 0U);
+    }
+    if (debounceReg2 == 0x80)
+    {
+        if (pressedCounter2 > 100) {
+            clickCount2 = 0;
+        }
+        released2 = 1;
+        pressed2 = 0;
+        releasedCounter2 = 0;
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON2_RELEASE_SIG, 0U);
+
+        if (clickCount2 > 0) {
+            QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON2_CLICK_SIG, clickCount2);
+        }
+
+        clickCount2++;
+    }
+
+    if (pressedCounter2 == 256) {
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON2_LONG_PRESS_SIG, 0U);
+    }
+    if ((pressedCounter2 > 256) && ((pressedCounter2 % 128) == 0)) {
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON2_LONG_PRESS_REPEAT_SIG, 0U);
+    }
+
+
+    
 }
 
 
@@ -138,6 +192,10 @@ void BSP_init(void) {
     *  but SystemCoreClock needs to be updated
     */
     SystemCoreClockUpdate();
+
+    LL_PWR_ClearFlag_WU1();
+    LL_PWR_ClearFlag_WU3();
+    
 }
 
 void BSP_LED1_Off(void)
@@ -160,9 +218,14 @@ void BSP_LED2_On(void)
     LL_GPIO_ResetOutputPin(LED2_GPIO_Port, LED2_Pin);
 }
 
-uint32_t BSP_ButtonPressed(void)
+uint32_t BSP_Button1Pressed(void)
 {
     return ! LL_GPIO_IsInputPinSet(BUTTON1_GPIO_Port, BUTTON1_Pin);
+}
+
+uint32_t BSP_Button2Pressed(void)
+{
+    return ! LL_GPIO_IsInputPinSet(BUTTON2_GPIO_Port, BUTTON2_Pin);
 }
 
 

@@ -27,10 +27,9 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32u0xx_ll_lpuart.h"
-#include "stm32u0xx_ll_rcc.h"
 #include "stm32u0xx_ll_pwr.h"
 #include "stm32u0xx_ll_crs.h"
+#include "stm32u0xx_ll_rcc.h"
 #include "stm32u0xx_ll_bus.h"
 #include "stm32u0xx_ll_system.h"
 #include "stm32u0xx_ll_exti.h"

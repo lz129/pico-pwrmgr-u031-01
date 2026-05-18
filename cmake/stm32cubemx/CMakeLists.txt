@@ -43,9 +43,6 @@ set(STM32_Drivers_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32U0xx_HAL_Driver/Src/stm32u0xx_ll_exti.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32U0xx_HAL_Driver/Src/stm32u0xx_ll_utils.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32U0xx_HAL_Driver/Src/stm32u0xx_ll_gpio.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32U0xx_HAL_Driver/Src/stm32u0xx_ll_lpuart.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32U0xx_HAL_Driver/Src/stm32u0xx_ll_rcc.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32U0xx_HAL_Driver/Src/stm32u0xx_ll_dma.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32U0xx_HAL_Driver/Src/stm32u0xx_ll_pwr.c
 )
 
