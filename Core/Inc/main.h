@@ -78,6 +78,10 @@ void Error_Handler(void);
 #define LED1_GPIO_Port GPIOA
 #define LED2_Pin LL_GPIO_PIN_5
 #define LED2_GPIO_Port GPIOA
+#define PWRON_OUT_Pin LL_GPIO_PIN_7
+#define PWRON_OUT_GPIO_Port GPIOA
+#define PWROFF_IN_Pin LL_GPIO_PIN_8
+#define PWROFF_IN_GPIO_Port GPIOA
 #ifndef NVIC_PRIORITYGROUP_0
 #define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,
                                                                  4 bits for subpriority */

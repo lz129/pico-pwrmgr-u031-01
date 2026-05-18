@@ -236,6 +236,16 @@ void BSP_CheckButton1Wakeup(void)
 
 }
 
+void BSP_SetPower(bool on)
+{
+    if (on) {
+        LL_GPIO_SetOutputPin(PWRON_OUT_GPIO_Port, PWRON_OUT_Pin);
+    }
+    else {
+        LL_GPIO_ResetOutputPin(PWRON_OUT_GPIO_Port, PWRON_OUT_Pin);
+    }
+}
+
 void BSP_CheckButton2Wakeup(void) 
 {
     if (LL_PWR_IsActiveFlag_WU3()) {

@@ -55,6 +55,7 @@ enum Signals {
     BUTTON2_LONG_PRESS_REPEAT_SIG,
 
     NO_BUTTON_WAKEUP_SIG,
+    SHUTDOWN_REQUEST_SIG,
 
     ENCODER_STEP_SIG,       // Rotary encoder step
     ONESECOND_SIG,          // One second tick
@@ -76,5 +77,6 @@ void BSP_CheckButton1Wakeup(void);
 void BSP_CheckButton2Wakeup(void);
 void BSP_CheckCheckNoButtonWakeup(void);
 void Shutdown(void);
+void BSP_SetPower(bool on);
 
 #endif /* BSP_H */
