@@ -53,28 +53,29 @@ void Test_ctor(Test* const me) {
 /*${AOs::Test::SM} .........................................................*/
 QState Test_initial(Test * const me) {
     /*${AOs::Test::SM::initial} */
-    return Q_TRAN(&Test_paused);
+    return Q_TRAN(&Test_startup);
 }
 
-/*${AOs::Test::SM::paused} .................................................*/
-QState Test_paused(Test * const me) {
+/*${AOs::Test::SM::button1} ................................................*/
+QState Test_button1(Test * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Test::SM::paused} */
+        /*${AOs::Test::SM::button1} */
         case Q_ENTRY_SIG: {
             BSP_LED1_On();
             BSP_LED2_Off();
+            QActive_armX(&me->super, 0U, 500U, 0U);
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Test::SM::paused::BUTTON1_CLICK} */
-        case BUTTON1_CLICK_SIG: {
-            status_ = Q_TRAN(&Test_working);
+        /*${AOs::Test::SM::button1::Q_TIMEOUT} */
+        case Q_TIMEOUT_SIG: {
+            status_ = Q_TRAN(&Test_shutdown);
             break;
         }
-        /*${AOs::Test::SM::paused::BUTTON2_CLICK} */
-        case BUTTON2_CLICK_SIG: {
-            status_ = Q_TRAN(&Test_working);
+        /*${AOs::Test::SM::button1::BUTTON1_CLICK} */
+        case BUTTON1_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_shutdown);
             break;
         }
         default: {
@@ -85,11 +86,11 @@ QState Test_paused(Test * const me) {
     return status_;
 }
 
-/*${AOs::Test::SM::working} ................................................*/
-QState Test_working(Test * const me) {
+/*${AOs::Test::SM::button2} ................................................*/
+QState Test_button2(Test * const me) {
     QState status_;
     switch (Q_SIG(me)) {
-        /*${AOs::Test::SM::working} */
+        /*${AOs::Test::SM::button2} */
         case Q_ENTRY_SIG: {
             BSP_LED1_Off();
             BSP_LED2_On();
@@ -97,20 +98,69 @@ QState Test_working(Test * const me) {
             status_ = Q_HANDLED();
             break;
         }
-        /*${AOs::Test::SM::working::Q_TIMEOUT} */
+        /*${AOs::Test::SM::button2::Q_TIMEOUT} */
         case Q_TIMEOUT_SIG: {
-            Shutdown();
-            status_ = Q_TRAN(&Test_paused);
+            status_ = Q_TRAN(&Test_shutdown);
             break;
         }
-        /*${AOs::Test::SM::working::BUTTON1_CLICK} */
-        case BUTTON1_CLICK_SIG: {
-            status_ = Q_TRAN(&Test_paused);
-            break;
-        }
-        /*${AOs::Test::SM::working::BUTTON2_CLICK} */
+        /*${AOs::Test::SM::button2::BUTTON2_CLICK} */
         case BUTTON2_CLICK_SIG: {
-            status_ = Q_TRAN(&Test_paused);
+            status_ = Q_TRAN(&Test_shutdown);
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&QHsm_top);
+            break;
+        }
+    }
+    return status_;
+}
+
+/*${AOs::Test::SM::startup} ................................................*/
+QState Test_startup(Test * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Test::SM::startup} */
+        case Q_ENTRY_SIG: {
+            BSP_CheckButton1Wakeup();
+            BSP_CheckButton2Wakeup();
+            BSP_CheckCheckNoButtonWakeup();
+
+
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Test::SM::startup::BUTTON1_CLICK} */
+        case BUTTON1_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_button1);
+            break;
+        }
+        /*${AOs::Test::SM::startup::BUTTON2_CLICK} */
+        case BUTTON2_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_button2);
+            break;
+        }
+        /*${AOs::Test::SM::startup::NO_BUTTON_WAKEUP} */
+        case NO_BUTTON_WAKEUP_SIG: {
+            status_ = Q_TRAN(&Test_shutdown);
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&QHsm_top);
+            break;
+        }
+    }
+    return status_;
+}
+
+/*${AOs::Test::SM::shutdown} ...............................................*/
+QState Test_shutdown(Test * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Test::SM::shutdown} */
+        case Q_ENTRY_SIG: {
+            Shutdown();
+            status_ = Q_HANDLED();
             break;
         }
         default: {

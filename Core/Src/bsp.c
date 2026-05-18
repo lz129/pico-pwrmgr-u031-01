@@ -192,10 +192,6 @@ void BSP_init(void) {
     *  but SystemCoreClock needs to be updated
     */
     SystemCoreClockUpdate();
-
-    LL_PWR_ClearFlag_WU1();
-    LL_PWR_ClearFlag_WU3();
-    
 }
 
 void BSP_LED1_Off(void)
@@ -226,6 +222,31 @@ uint32_t BSP_Button1Pressed(void)
 uint32_t BSP_Button2Pressed(void)
 {
     return ! LL_GPIO_IsInputPinSet(BUTTON2_GPIO_Port, BUTTON2_Pin);
+}
+
+void BSP_CheckButton1Wakeup(void) 
+{
+    if (LL_PWR_IsActiveFlag_WU1()) {
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON1_CLICK_SIG, 1);
+    }
+    LL_PWR_ClearFlag_WU1();
+
+}
+
+void BSP_CheckButton2Wakeup(void) 
+{
+    if (LL_PWR_IsActiveFlag_WU3()) {
+        QACTIVE_POST_ISR((QActive *)&AO_Test, BUTTON2_CLICK_SIG, 1);
+    }
+    LL_PWR_ClearFlag_WU3();
+
+}
+
+void BSP_CheckCheckNoButtonWakeup(void) 
+{
+    if (!(LL_PWR_IsActiveFlag_WU3() || LL_PWR_IsActiveFlag_WU1())) {
+        QACTIVE_POST_ISR((QActive *)&AO_Test, NO_BUTTON_WAKEUP_SIG, 1);
+    }
 }
 
 

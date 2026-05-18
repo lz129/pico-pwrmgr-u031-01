@@ -38,8 +38,10 @@ typedef struct Test {
 
 /* protected: */
 QState Test_initial(Test * const me);
-QState Test_paused(Test * const me);
-QState Test_working(Test * const me);
+QState Test_button1(Test * const me);
+QState Test_button2(Test * const me);
+QState Test_startup(Test * const me);
+QState Test_shutdown(Test * const me);
 /*$enddecl${AOs::Test} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 /*$declare${AOs::Test_ctor} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 

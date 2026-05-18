@@ -32,53 +32,79 @@ https://www.state-machine.com/qpn/exa.html</documentation>
  <package name="AOs" stereotype="0x02">
   <class name="Test" superclass="qpn::QActive">
    <statechart properties="0x01">
-    <initial target="../1">
-     <initial_glyph conn="11,6,4,0,7">
+    <initial target="../3">
+     <initial_glyph conn="16,7,5,3,13">
       <action box="0,-2,40,4"/>
      </initial_glyph>
     </initial>
-    <state name="paused">
+    <state name="button1">
      <entry>BSP_LED1_On();
-BSP_LED2_Off();</entry>
-     <tran trig="BUTTON1_CLICK" target="../../2">
-      <tran_glyph conn="28,23,1,0,20,12">
-       <action box="0,-2,14,3"/>
+BSP_LED2_Off();
+QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
+     <tran trig="Q_TIMEOUT" target="../../4">
+      <tran_glyph conn="24,48,2,0,6,15,8">
+       <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="BUTTON2_CLICK" target="../../2">
-      <tran_glyph conn="28,20,1,0,22,15">
-       <action box="0,-2,15,2"/>
+     <tran trig="BUTTON1_CLICK" target="../../4">
+      <tran_glyph conn="7,48,2,3,21,26">
+       <action box="0,-2,13,3"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="4,13,24,20">
-      <entry box="1,2,17,6"/>
+     <state_glyph node="3,26,33,22">
+      <entry box="1,2,32,10"/>
      </state_glyph>
     </state>
-    <state name="working">
+    <state name="button2">
      <entry>BSP_LED1_Off();
 BSP_LED2_On();
 QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
-     <tran trig="Q_TIMEOUT" target="../../1">
-      <action>Shutdown();</action>
-      <tran_glyph conn="32,49,3,2,-18,-16">
+     <tran trig="Q_TIMEOUT" target="../../4">
+      <tran_glyph conn="60,48,2,0,6,-10,8">
        <action box="0,-2,13,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="BUTTON1_CLICK" target="../../1">
-      <tran_glyph conn="32,52,3,2,-22,-19">
+     <tran trig="BUTTON2_CLICK" target="../../4">
+      <tran_glyph conn="75,48,2,1,21,-18">
        <action box="0,-2,16,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="BUTTON2_CLICK" target="../../1">
-      <tran_glyph conn="32,54,3,2,-24,-21">
-       <action box="0,-2,17,3"/>
-      </tran_glyph>
-     </tran>
-     <state_glyph node="32,35,29,22">
-      <entry box="1,2,25,10"/>
+     <state_glyph node="54,26,37,22">
+      <entry box="1,2,33,8"/>
      </state_glyph>
     </state>
-    <state_diagram size="67,62"/>
+    <state name="startup">
+     <entry>BSP_CheckButton1Wakeup();
+BSP_CheckButton2Wakeup();
+BSP_CheckCheckNoButtonWakeup();
+
+</entry>
+     <tran trig="BUTTON1_CLICK" target="../../1">
+      <tran_glyph conn="39,16,2,0,8,-15,2">
+       <action box="-15,6,16,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="BUTTON2_CLICK" target="../../2">
+      <tran_glyph conn="46,16,2,0,8,17,2">
+       <action box="2,6,17,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="NO_BUTTON_WAKEUP" target="../../4">
+      <tran_glyph conn="42,16,2,0,46">
+       <action box="0,-2,18,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="29,2,30,14">
+      <entry box="1,2,28,8"/>
+     </state_glyph>
+    </state>
+    <state name="shutdown">
+     <entry>Shutdown();</entry>
+     <state_glyph node="33,62,24,13">
+      <entry box="1,2,16,5"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="113,78"/>
    </statechart>
   </class>
   <operation name="Test_ctor" type="void" visibility="0x00" properties="0x01">

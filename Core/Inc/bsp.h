@@ -54,6 +54,8 @@ enum Signals {
     BUTTON2_LONG_PRESS_SIG,
     BUTTON2_LONG_PRESS_REPEAT_SIG,
 
+    NO_BUTTON_WAKEUP_SIG,
+
     ENCODER_STEP_SIG,       // Rotary encoder step
     ONESECOND_SIG,          // One second tick
     BEEP_FINISHED_SIG,      // Beep signal finished
@@ -70,6 +72,9 @@ void BSP_LED2_On(void);
 void BSP_LED2_Off(void);
 uint32_t BSP_Button1Pressed(void);
 uint32_t BSP_Button2Pressed(void);
+void BSP_CheckButton1Wakeup(void);
+void BSP_CheckButton2Wakeup(void);
+void BSP_CheckCheckNoButtonWakeup(void);
 void Shutdown(void);
 
 #endif /* BSP_H */
