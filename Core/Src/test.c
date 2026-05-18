@@ -122,9 +122,9 @@ QState Test_startup(Test * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Test::SM::startup} */
         case Q_ENTRY_SIG: {
+            //BSP_CheckCheckNoButtonWakeup();
             BSP_CheckButton1Wakeup();
             BSP_CheckButton2Wakeup();
-            BSP_CheckCheckNoButtonWakeup();
 
 
             status_ = Q_HANDLED();
