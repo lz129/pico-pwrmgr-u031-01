@@ -35,6 +35,7 @@
 #include "qpn.h"
 #include "bsp.h"
 #include "main.h"
+#include "stm32u031xx.h"
 #include "stm32u0xx_ll_gpio.h"
 #include "stm32u0xx_ll_pwr.h"
 #include "tasks.h"
@@ -72,11 +73,15 @@ static volatile uint16_t pressedCounter2;
 static volatile uint16_t releasedCounter2;
 static volatile uint8_t clickCount2;
 
+// shutdown request handling
+static volatile uint32_t lastValue = 1;
+
 void Shutdown(void)
 {
    /* Setup pullup resistor for wakeup pin while in shutdown mode */
    LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_0);
    LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_1);
+   LL_PWR_EnableGPIOPullDown(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_7);
    LL_PWR_EnablePUPDCfg();
 
    /* Enable wake up pin 1 */ 
@@ -105,6 +110,16 @@ void SysTick_Handler(void) {
     ++ticks;
 
     QF_tickXISR(0U); /* process time events for rate 0 */
+
+    // shutdown request signal handling
+    // send a signal on falling edge
+    uint32_t pinValue = LL_GPIO_IsInputPinSet(SHUTDN_REQ_IN_GPIO_Port, SHUTDN_REQ_IN_Pin);
+    if (pinValue != lastValue) {
+        lastValue = pinValue;
+        if (pinValue == 0) {
+            QACTIVE_POST_ISR((QActive *)&AO_Test, SHUTDOWN_REQUEST_SIG, 0U);
+        }
+    }
 
     // debounce button 1
     if (pressed1 && (pressedCounter1 != 0xffff)) pressedCounter1 += pressed1;

@@ -185,7 +185,7 @@ static void MX_GPIO_Init(void)
   LL_GPIO_ResetOutputPin(PWRON_OUT_GPIO_Port, PWRON_OUT_Pin);
 
   /**/
-  GPIO_InitStruct.Pin = BUTTON1_Pin|BUTTON2_Pin|PWROFF_IN_Pin;
+  GPIO_InitStruct.Pin = BUTTON1_Pin|BUTTON2_Pin|SHUTDN_REQ_IN_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);

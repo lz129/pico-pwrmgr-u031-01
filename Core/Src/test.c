@@ -64,6 +64,7 @@ QState Test_button1(Test * const me) {
         case Q_ENTRY_SIG: {
             BSP_LED1_On();
             BSP_LED2_Off();
+            BSP_SetPower(true);
             QActive_armX(&me->super, 0U, 500U, 0U);
             status_ = Q_HANDLED();
             break;
@@ -75,6 +76,11 @@ QState Test_button1(Test * const me) {
         }
         /*${AOs::Test::SM::button1::BUTTON1_CLICK} */
         case BUTTON1_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_shutdown);
+            break;
+        }
+        /*${AOs::Test::SM::button1::SHUTDOWN_REQUEST} */
+        case SHUTDOWN_REQUEST_SIG: {
             status_ = Q_TRAN(&Test_shutdown);
             break;
         }
@@ -94,6 +100,7 @@ QState Test_button2(Test * const me) {
         case Q_ENTRY_SIG: {
             BSP_LED1_Off();
             BSP_LED2_On();
+            BSP_SetPower(true);
             QActive_armX(&me->super, 0U, 500U, 0U);
             status_ = Q_HANDLED();
             break;
@@ -105,6 +112,11 @@ QState Test_button2(Test * const me) {
         }
         /*${AOs::Test::SM::button2::BUTTON2_CLICK} */
         case BUTTON2_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_shutdown);
+            break;
+        }
+        /*${AOs::Test::SM::button2::SHUTDOWN_REQUEST} */
+        case SHUTDOWN_REQUEST_SIG: {
             status_ = Q_TRAN(&Test_shutdown);
             break;
         }
@@ -159,6 +171,7 @@ QState Test_shutdown(Test * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Test::SM::shutdown} */
         case Q_ENTRY_SIG: {
+            BSP_SetPower(false);
             Shutdown();
             status_ = Q_HANDLED();
             break;

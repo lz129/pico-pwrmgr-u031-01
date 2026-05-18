@@ -40,24 +40,31 @@ https://www.state-machine.com/qpn/exa.html</documentation>
     <state name="button1">
      <entry>BSP_LED1_On();
 BSP_LED2_Off();
+BSP_SetPower(true);
 QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
      <tran trig="Q_TIMEOUT" target="../../4">
-      <tran_glyph conn="24,48,2,0,6,15,8">
+      <tran_glyph conn="25,50,2,0,6,14,6">
        <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTON1_CLICK" target="../../4">
-      <tran_glyph conn="7,48,2,3,21,26">
+      <tran_glyph conn="8,50,2,3,19,25">
        <action box="0,-2,13,3"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="3,26,33,22">
+     <tran trig="SHUTDOWN_REQUEST" target="../../4">
+      <tran_glyph conn="20,50,2,3,15,13">
+       <action box="-8,10,21,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="4,28,33,22">
       <entry box="1,2,32,10"/>
      </state_glyph>
     </state>
     <state name="button2">
      <entry>BSP_LED1_Off();
 BSP_LED2_On();
+BSP_SetPower(true);
 QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
      <tran trig="Q_TIMEOUT" target="../../4">
       <tran_glyph conn="60,48,2,0,6,-10,8">
@@ -69,8 +76,13 @@ QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
        <action box="0,-2,16,2"/>
       </tran_glyph>
      </tran>
+     <tran trig="SHUTDOWN_REQUEST" target="../../4">
+      <tran_glyph conn="91,38,1,1,6,33,-40">
+       <action box="0,-2,20,2"/>
+      </tran_glyph>
+     </tran>
      <state_glyph node="54,26,37,22">
-      <entry box="1,2,33,8"/>
+      <entry box="1,2,33,12"/>
      </state_glyph>
     </state>
     <state name="startup">
@@ -80,7 +92,7 @@ BSP_CheckButton2Wakeup();
 
 </entry>
      <tran trig="BUTTON1_CLICK" target="../../1">
-      <tran_glyph conn="39,16,2,0,8,-15,2">
+      <tran_glyph conn="39,16,2,0,8,-14,4">
        <action box="-15,6,16,2"/>
       </tran_glyph>
      </tran>
@@ -99,7 +111,8 @@ BSP_CheckButton2Wakeup();
      </state_glyph>
     </state>
     <state name="shutdown">
-     <entry>Shutdown();</entry>
+     <entry>BSP_SetPower(false);
+Shutdown();</entry>
      <state_glyph node="33,62,24,13">
       <entry box="1,2,16,5"/>
      </state_glyph>
