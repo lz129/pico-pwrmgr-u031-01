@@ -508,7 +508,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "/home/josef/projects/pico-pwrmgr-u031-01/bt-rc-tx/gerbers/",
       "specctra_dsn": "",
       "vrml": ""
     },
