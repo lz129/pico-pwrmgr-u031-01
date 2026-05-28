@@ -78,31 +78,33 @@ static volatile uint32_t lastValue = 1;
 
 void Shutdown(void)
 {
-   /* Setup pullup resistor for wakeup pin while in shutdown mode */
-   LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_0);
-   LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_1);
-   LL_PWR_EnableGPIOPullDown(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_7);
-   LL_PWR_EnablePUPDCfg();
+    if (LL_GPIO_IsInputPinSet(INH_SHDN_GPIO_Port, INH_SHDN_Pin)) {
+        /* Setup pullup resistor for wakeup pin while in shutdown mode */
+        LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_0);
+        LL_PWR_EnableGPIOPullUp(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_1);
+        LL_PWR_EnableGPIOPullDown(LL_PWR_GPIO_A, LL_PWR_GPIO_BIT_7);
+        LL_PWR_EnablePUPDCfg();
 
-   /* Enable wake up pin 1 */ 
-   LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN1);
-   LL_PWR_SetWakeUpPinPolarityLow(LL_PWR_WAKEUP_PIN1);
-   LL_PWR_ClearFlag_WU1();
+        /* Enable wake up pin 1 */ 
+        LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN1);
+        LL_PWR_SetWakeUpPinPolarityLow(LL_PWR_WAKEUP_PIN1);
+        LL_PWR_ClearFlag_WU1();
 
-   /* Enable wake up pin 3 */ 
-   LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN3);
-   LL_PWR_SetWakeUpPinPolarityLow(LL_PWR_WAKEUP_PIN3);
-   LL_PWR_ClearFlag_WU3();
+        /* Enable wake up pin 3 */ 
+        LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN3);
+        LL_PWR_SetWakeUpPinPolarityLow(LL_PWR_WAKEUP_PIN3);
+        LL_PWR_ClearFlag_WU3();
 
-   /* Set Shutdown mode */
-   LL_PWR_SetPowerMode(LL_PWR_MODE_STANDBY);
-   LL_PWR_EnableBORPVD_ULP();
+        /* Set Shutdown mode */
+        LL_PWR_SetPowerMode(LL_PWR_MODE_STANDBY);
+        LL_PWR_EnableBORPVD_ULP();
 
-   /* Set SLEEPDEEP bit of Cortex System Control Register */
-   LL_LPM_EnableDeepSleep();
+        /* Set SLEEPDEEP bit of Cortex System Control Register */
+        LL_LPM_EnableDeepSleep();
 
-   /* Request Wait For Interrupt */
-   __WFI();
+        /* Request Wait For Interrupt */
+        __WFI();
+    }
 }
 
 void SysTick_Handler(void) {

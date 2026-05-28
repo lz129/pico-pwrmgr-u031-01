@@ -82,6 +82,8 @@ void Error_Handler(void);
 #define PWRON_OUT_GPIO_Port GPIOA
 #define SHUTDN_REQ_IN_Pin LL_GPIO_PIN_8
 #define SHUTDN_REQ_IN_GPIO_Port GPIOA
+#define INH_SHDN_Pin LL_GPIO_PIN_11
+#define INH_SHDN_GPIO_Port GPIOA
 #ifndef NVIC_PRIORITYGROUP_0
 #define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,
                                                                  4 bits for subpriority */

@@ -111,13 +111,25 @@ BSP_CheckButton2Wakeup();
      </state_glyph>
     </state>
     <state name="shutdown">
-     <entry>BSP_SetPower(false);
+     <entry>BSP_LED1_Off();
+BSP_LED2_Off();
+BSP_SetPower(false);
 Shutdown();</entry>
-     <state_glyph node="33,62,24,13">
-      <entry box="1,2,16,5"/>
+     <tran trig="BUTTON2_CLICK" target="../../2">
+      <tran_glyph conn="57,66,1,2,14,-18">
+       <action box="0,-2,14,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="BUTTON1_CLICK" target="../../1">
+      <tran_glyph conn="33,72,3,2,-28,-22">
+       <action box="-13,1,14,3"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="33,62,24,18">
+      <entry box="1,2,18,7"/>
      </state_glyph>
     </state>
-    <state_diagram size="113,78"/>
+    <state_diagram size="113,86"/>
    </statechart>
   </class>
   <operation name="Test_ctor" type="void" visibility="0x00" properties="0x01">

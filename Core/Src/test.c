@@ -171,9 +171,21 @@ QState Test_shutdown(Test * const me) {
     switch (Q_SIG(me)) {
         /*${AOs::Test::SM::shutdown} */
         case Q_ENTRY_SIG: {
+            BSP_LED1_Off();
+            BSP_LED2_Off();
             BSP_SetPower(false);
             Shutdown();
             status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Test::SM::shutdown::BUTTON2_CLICK} */
+        case BUTTON2_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_button2);
+            break;
+        }
+        /*${AOs::Test::SM::shutdown::BUTTON1_CLICK} */
+        case BUTTON1_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_button1);
             break;
         }
         default: {
