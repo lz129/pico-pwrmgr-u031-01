@@ -2,5 +2,5 @@ build
 mx.scratch
 !.settings
 .sm
-.history
+bt-rc-tx/.history
 **/*-backups
