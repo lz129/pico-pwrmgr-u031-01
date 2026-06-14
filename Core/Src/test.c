@@ -65,7 +65,7 @@ QState Test_button1(Test * const me) {
             BSP_LED1_On();
             BSP_LED2_Off();
             BSP_SetPower(true);
-            QActive_armX(&me->super, 0U, 500U, 0U);
+            QActive_armX(&me->super, 0U, 1000U, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -81,7 +81,13 @@ QState Test_button1(Test * const me) {
         }
         /*${AOs::Test::SM::button1::SHUTDOWN_REQUEST} */
         case SHUTDOWN_REQUEST_SIG: {
-            status_ = Q_TRAN(&Test_shutdown);
+            /*${AOs::Test::SM::button1::SHUTDOWN_REQUEST::[after2s]} */
+            if ((BSP_getTicks() - BSP_getTicksPowerOn()) > 200U) {
+                status_ = Q_TRAN(&Test_shutdown);
+            }
+            else {
+                status_ = Q_UNHANDLED();
+            }
             break;
         }
         default: {
@@ -101,7 +107,7 @@ QState Test_button2(Test * const me) {
             BSP_LED1_Off();
             BSP_LED2_On();
             BSP_SetPower(true);
-            QActive_armX(&me->super, 0U, 500U, 0U);
+            QActive_armX(&me->super, 0U, 1000U, 0U);
             status_ = Q_HANDLED();
             break;
         }
@@ -117,7 +123,13 @@ QState Test_button2(Test * const me) {
         }
         /*${AOs::Test::SM::button2::SHUTDOWN_REQUEST} */
         case SHUTDOWN_REQUEST_SIG: {
-            status_ = Q_TRAN(&Test_shutdown);
+            /*${AOs::Test::SM::button2::SHUTDOWN_REQUEST::[after2s]} */
+            if ((BSP_getTicks() - BSP_getTicksPowerOn()) > 200U) {
+                status_ = Q_TRAN(&Test_shutdown);
+            }
+            else {
+                status_ = Q_UNHANDLED();
+            }
             break;
         }
         default: {
@@ -157,6 +169,11 @@ QState Test_startup(Test * const me) {
             status_ = Q_TRAN(&Test_shutdown);
             break;
         }
+        /*${AOs::Test::SM::startup::BUTTON1_LONG_PRESS} */
+        case BUTTON1_LONG_PRESS_SIG: {
+            status_ = Q_TRAN(&Test_engineering);
+            break;
+        }
         default: {
             status_ = Q_SUPER(&QHsm_top);
             break;
@@ -186,6 +203,36 @@ QState Test_shutdown(Test * const me) {
         /*${AOs::Test::SM::shutdown::BUTTON1_CLICK} */
         case BUTTON1_CLICK_SIG: {
             status_ = Q_TRAN(&Test_button1);
+            break;
+        }
+        /*${AOs::Test::SM::shutdown::BUTTON1_LONG_PRESS} */
+        case BUTTON1_LONG_PRESS_SIG: {
+            status_ = Q_TRAN(&Test_engineering);
+            break;
+        }
+        default: {
+            status_ = Q_SUPER(&QHsm_top);
+            break;
+        }
+    }
+    return status_;
+}
+
+/*${AOs::Test::SM::engineering} ............................................*/
+QState Test_engineering(Test * const me) {
+    QState status_;
+    switch (Q_SIG(me)) {
+        /*${AOs::Test::SM::engineering} */
+        case Q_ENTRY_SIG: {
+            BSP_LED1_On();
+            BSP_LED2_On();
+            BSP_SetPower(true);
+            status_ = Q_HANDLED();
+            break;
+        }
+        /*${AOs::Test::SM::engineering::BUTTON1_CLICK} */
+        case BUTTON1_CLICK_SIG: {
+            status_ = Q_TRAN(&Test_shutdown);
             break;
         }
         default: {

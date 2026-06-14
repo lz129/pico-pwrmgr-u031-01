@@ -55,9 +55,11 @@ enum KernelAwareISRs {
 /* "kernel-aware" interrupts should not overlap the PendSV priority */
 Q_ASSERT_COMPILE(MAX_KERNEL_AWARE_CMSIS_PRI <= (0xFF >>(8-__NVIC_PRIO_BITS)));
 
+// system clock tick counter
+static volatile uint32_t ticks = 0U;
+static volatile uint32_t ticksPowerOn = 0U;
 
 // debounce button
-static volatile uint16_t ticks;
 
 static volatile uint8_t debounceReg1 = 0x02;
 static volatile uint8_t pressed1;
@@ -106,6 +108,17 @@ void Shutdown(void)
         __WFI();
     }
 }
+
+uint32_t BSP_getTicks(void)
+{
+    return ticks;
+}
+
+uint32_t BSP_getTicksPowerOn(void)
+{
+    return ticksPowerOn;
+}
+
 
 void SysTick_Handler(void) {
 
@@ -257,6 +270,7 @@ void BSP_SetPower(bool on)
 {
     if (on) {
         LL_GPIO_SetOutputPin(PWRON_OUT_GPIO_Port, PWRON_OUT_Pin);
+        ticksPowerOn = ticks;
     }
     else {
         LL_GPIO_ResetOutputPin(PWRON_OUT_GPIO_Port, PWRON_OUT_Pin);

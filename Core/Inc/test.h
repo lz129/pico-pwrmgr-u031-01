@@ -42,6 +42,7 @@ QState Test_button1(Test * const me);
 QState Test_button2(Test * const me);
 QState Test_startup(Test * const me);
 QState Test_shutdown(Test * const me);
+QState Test_engineering(Test * const me);
 /*$enddecl${AOs::Test} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 /*$declare${AOs::Test_ctor} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 

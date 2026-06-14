@@ -66,6 +66,8 @@ enum Signals {
 
 
 void BSP_init(void);
+uint32_t BSP_getTicks(void);
+uint32_t BSP_getTicksPowerOn(void);
 
 void BSP_LED1_On(void);
 void BSP_LED1_Off(void);

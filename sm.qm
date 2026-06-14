@@ -41,20 +41,26 @@ https://www.state-machine.com/qpn/exa.html</documentation>
      <entry>BSP_LED1_On();
 BSP_LED2_Off();
 BSP_SetPower(true);
-QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
+QActive_armX(&amp;me-&gt;super, 0U, 1000U, 0U);</entry>
      <tran trig="Q_TIMEOUT" target="../../4">
-      <tran_glyph conn="25,50,2,0,6,14,6">
+      <tran_glyph conn="34,50,2,0,6,5,19">
        <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTON1_CLICK" target="../../4">
-      <tran_glyph conn="8,50,2,3,19,25">
+      <tran_glyph conn="8,50,2,3,32,25">
        <action box="0,-2,13,3"/>
       </tran_glyph>
      </tran>
-     <tran trig="SHUTDOWN_REQUEST" target="../../4">
-      <tran_glyph conn="20,50,2,3,15,13">
-       <action box="-8,10,21,2"/>
+     <tran trig="SHUTDOWN_REQUEST">
+      <choice target="../../../4">
+       <guard brief="after 2s">(BSP_getTicks() - BSP_getTicksPowerOn()) &gt; 200U</guard>
+       <choice_glyph conn="15,58,4,3,22,18">
+        <action box="0,20,10,2"/>
+       </choice_glyph>
+      </choice>
+      <tran_glyph conn="15,50,2,-1,8">
+       <action box="0,4,18,3"/>
       </tran_glyph>
      </tran>
      <state_glyph node="4,28,33,22">
@@ -65,19 +71,25 @@ QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
      <entry>BSP_LED1_Off();
 BSP_LED2_On();
 BSP_SetPower(true);
-QActive_armX(&amp;me-&gt;super, 0U, 500U, 0U);</entry>
+QActive_armX(&amp;me-&gt;super, 0U, 1000U, 0U);</entry>
      <tran trig="Q_TIMEOUT" target="../../4">
-      <tran_glyph conn="60,48,2,0,6,-10,8">
+      <tran_glyph conn="60,48,2,0,6,-10,21">
        <action box="0,-2,13,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTON2_CLICK" target="../../4">
-      <tran_glyph conn="75,48,2,1,21,-18">
+      <tran_glyph conn="75,48,2,1,34,-18">
        <action box="0,-2,16,2"/>
       </tran_glyph>
      </tran>
-     <tran trig="SHUTDOWN_REQUEST" target="../../4">
-      <tran_glyph conn="91,38,1,1,6,33,-40">
+     <tran trig="SHUTDOWN_REQUEST">
+      <choice target="../../../4">
+       <guard brief="after 2s">(BSP_getTicks() - BSP_getTicksPowerOn()) &gt; 200U</guard>
+       <choice_glyph conn="97,58,4,1,26,-40">
+        <action box="-11,24,10,2"/>
+       </choice_glyph>
+      </choice>
+      <tran_glyph conn="91,38,1,-1,6,20">
        <action box="0,-2,20,2"/>
       </tran_glyph>
      </tran>
@@ -102,8 +114,13 @@ BSP_CheckButton2Wakeup();
       </tran_glyph>
      </tran>
      <tran trig="NO_BUTTON_WAKEUP" target="../../4">
-      <tran_glyph conn="42,16,2,0,46">
-       <action box="0,-2,18,2"/>
+      <tran_glyph conn="42,16,2,0,59">
+       <action box="0,22,18,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="BUTTON1_LONG_PRESS" target="../../5">
+      <tran_glyph conn="59,8,1,0,59,10">
+       <action box="0,-2,22,2"/>
       </tran_glyph>
      </tran>
      <state_glyph node="29,2,30,14">
@@ -116,20 +133,38 @@ BSP_LED2_Off();
 BSP_SetPower(false);
 Shutdown();</entry>
      <tran trig="BUTTON2_CLICK" target="../../2">
-      <tran_glyph conn="57,66,1,2,14,-18">
+      <tran_glyph conn="57,79,1,2,14,-31">
        <action box="0,-2,14,2"/>
       </tran_glyph>
      </tran>
      <tran trig="BUTTON1_CLICK" target="../../1">
-      <tran_glyph conn="33,72,3,2,-28,-22">
+      <tran_glyph conn="33,85,3,2,-28,-35">
        <action box="-13,1,14,3"/>
       </tran_glyph>
      </tran>
-     <state_glyph node="33,62,24,18">
+     <tran trig="BUTTON1_LONG_PRESS" target="../../5">
+      <tran_glyph conn="57,88,1,2,59,-45">
+       <action box="0,-2,22,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="33,75,24,27">
       <entry box="1,2,18,7"/>
      </state_glyph>
     </state>
-    <state_diagram size="113,86"/>
+    <state name="engineering">
+     <entry>BSP_LED1_On();
+BSP_LED2_On();
+BSP_SetPower(true);</entry>
+     <tran trig="BUTTON1_CLICK" target="../../4">
+      <tran_glyph conn="126,43,2,1,51,-69">
+       <action box="-60,49,16,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="112,18,24,25">
+      <entry box="1,2,20,9"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="164,157"/>
    </statechart>
   </class>
   <operation name="Test_ctor" type="void" visibility="0x00" properties="0x01">
