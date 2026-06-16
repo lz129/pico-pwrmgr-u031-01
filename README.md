@@ -27,6 +27,19 @@ Modifications required on the Raspberry Pi Pico W board:
 
 Refer to [images](images) for details.
 
+|Image|Content|
+|-----|--------|
+|[Shipping box](images/shipping-box.jpg)|PCBs as delivered by JLCPCB|
+|[Delivered boards](images/delivered-boards.jpg)|PCBs as delivered by JLCPCB|
+|[Board unpopulated (front)](images/board-unpopulated-front.jpg)|The unpopulated PCB from the top side|
+|[Board unpopulated (back)](images/board-unpopulated-back.jpg)|The unpopulated PCB from the back side|
+|[Breadboard setup](images/breadboard-setup.jpg)|The complete design on a breadboard|
+|[Debug connections (front)](images/debug-connections-front.jpg)|Populated PCB with debug connections (front)|
+|[Debug connections (back)](images/debug-connections-back.jpg)|Populated PCB with debug connections (back)|
+|[Board in housing](images/board-in-housing.jpg)|Populated PCB in housing|
+|[Final device with batteries](images/final-device-open-box.jpg)|Final device with batteries and open housing|
+
+
 
 ## Software
 
