@@ -2,6 +2,8 @@
 
 What is it? A replacement for broken remote controls used for garage doors and similar purposes. Original equipment is often expensive or completely unobtainium.
 
+![Board in housing](images/board-in-housing.jpg)
+
 ## Versions
 
 This document describes rev A. The design and the PCB have some [issues](ISSUES.md) which requires hardware patches on the PCB.
