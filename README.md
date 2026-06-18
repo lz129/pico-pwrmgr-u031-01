@@ -87,4 +87,22 @@ __J5__ jumper to inhibit shutdown. Use it when debugging to avoid debug probe di
 
 __Jx__ jumper patched into the rev A design. It disconnects the incoming power from the USB to the microcontroller. __The microcontroller can be damaged when an USB cable is connected to the Raspberry Pi board and the jumper is not removed.__
 
+# BOM
+
+|Reference|Qty|Value|DNP|Exclude from BOM|Exclude from Board|Footprint|Datasheet|
+|---------|---|-----|---|----------------|------------------|------|----|
+|A1|1|RaspberryPi_Pico_W||||Module:RaspberryPi_Pico_W_SMD_HandSolder|https://datasheets.raspberrypi.com/picow/pico-w-datasheet.pdf|
+|C1|1|47u||||Capacitor_SMD:C_1206_3216Metric|
+|C2|1|100n||||Capacitor_SMD:C_0805_2012Metric|
+|D3|1|LED1||||LED_THT:LED_D5.0mm|
+|D4|1|LED2||||LED_THT:LED_D5.0mm|
+|J1|1|Battery 3V||||Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal|
+|J3|1|SW Debug||||Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal|
+|J4|1|Inhibit Shutdown||||Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal|
+|R4,R5|2|2k2||||Resistor_SMD:R_0805_2012Metric|
+|SW2|1|BUTTON1||||Button_Switch_THT:SW_PUSH_6mm|
+|SW3|1|BUTTON2||||Button_Switch_THT:SW_PUSH_6mm|
+|U2|1|STM32U031F8Px||||Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm|https://www.st.com/resource/en/datasheet/stm32u031f8.pdf|
+||1|STRAPUBOX 6062 GR Plastic Box 85x65x28mm|||x|Housing|
+|Cx|1|470u||||Aluminium Elko radial|
 
